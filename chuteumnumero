@@ -1,0 +1,49 @@
+import random
+import PySimpleGUI as sg
+
+class ChuteNumero:
+    def __init__(self):
+        self.valoraleatorio = 0
+        self.valormin = 1
+        self.valormax = 100
+        self.tentarnovamente = True
+
+    def Iniciar(self):
+        #layout
+        layout = [
+            [sg.Text('Seu Chute',size=(39,0))],
+            [sg.Input(size=(18,0),key='ValorChute')],
+            [sg.Button('Chutar')],
+            [sg.Output(size=(39,10))]
+        ]
+        #criar uma janela
+        self.janela = sg.Window('Chute o Numero',layout=layout)
+        #trabalharvalores
+        self.GerarAleatorio()
+        try:
+            while True:
+                #receber valores
+                self.LerValoresDaTela()
+                if self.evento == 'Chutar':
+                    self.valordochute = self.valores['ValorChute']
+                    while self.tentarnovamente == True:
+                        if int(self.valordochute) > self.valoraleatorio:
+                            print('Chute um valor mais baixo!')
+                            break
+                        elif int(self.valordochute) < self.valoraleatorio:
+                            print('Chute um valor mais alto!')
+                            break
+                        elif int(self.valordochute) == self.valoraleatorio:
+                            self.tentarnovamente = False
+                            print('PARABENS VOCÊ ACERTOU!!')
+                            break
+        except:
+            print('Favor digitar apenas numeros!')
+            self.Iniciar()
+
+    def LerValoresDaTela(self):
+        self.evento, self.valores = self.janela.Read()
+    def GerarAleatorio(self):
+        self.valoraleatorio =  random.randint(self.valormin, self.valormax)
+chute = ChuteNumero()
+chute.Iniciar()
