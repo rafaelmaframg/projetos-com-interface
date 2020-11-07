@@ -1,0 +1,106 @@
+import pygame
+from random import randint
+from time import sleep
+
+pygame.init()
+ 
+x = 400 #110 480
+y = 480
+pos_x = 70
+pos_y = randint(-1000,-150)
+pos_y1 = randint(-2000,-150)
+pos_y2 = randint(-3000,-150)
+pos_y3 = randint(-4000,-150)
+
+contador = 0
+velocidade = 20
+velocidade_outros = 20
+fundo = pygame.image.load('rua.jpg')
+ctps = pygame.image.load('ctps.png')#148x132
+racao = pygame.image.load('racao.png')#119x185
+vassoura = pygame.image.load('vassoura.png')#116x208
+dai = pygame.image.load('dai.png') #103x124
+fogao = pygame.image.load('fogao.png') #130x130
+janela = pygame.display.set_mode((640,600))
+pygame.display.set_caption('As Aventuras de Gomon')
+
+font = pygame.font.SysFont('arial black',20)
+texto = font.render('Responsabilidades: ',True,(255,255,255),(0,0,0))
+pos_texto = texto.get_rect()
+pos_texto.center = (115,50)
+
+janela_aberta = True
+while janela_aberta: 
+    pygame.time.delay(50)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            janela_aberta = False
+
+    comandos = pygame.key.get_pressed()
+    if comandos[pygame.K_RIGHT] and x < 480:
+        x += velocidade
+    if comandos[pygame.K_LEFT] and x > 90:
+        x -= velocidade
+    
+
+    pos_y += velocidade_outros #fogao
+    pos_y1 += velocidade_outros #ctps
+    pos_y2 += velocidade_outros #racao
+    pos_y3 += velocidade_outros #vassoura
+
+    if ((x + 100 > pos_x+380 and y -112 < pos_y1)):
+        break
+    if  x-100 < pos_x and y-110<pos_y:   #119x185
+        break
+    if x-100 < pos_x+120 and x-100>74 and y-208 <pos_y3 or x+100 >pos_x+120 and x+100<306 and y-208 <pos_y3:
+        break
+    if x-100 < 320 and x-100>201 and y-208 <pos_y2 or x+100 >pos_x+250 and x+100<439 and y-180 <pos_y2:
+        break
+        
+
+#posição 190+116 =306
+#320+119 = 
+    if 590 < pos_y < 610:
+        contador+=1
+    if 590 < pos_y1 < 610:
+        contador+=1
+    if 590 < pos_y2 < 610:
+        contador+=1
+    if 590 < pos_y3 < 610:
+        contador+=1
+
+    if pos_y >= 600:
+        pos_y = randint(-1000,-150)
+    if pos_y1 >= 600:
+        pos_y1 = randint(-2150,-1150)
+    if pos_y2 >= 600:
+        pos_y2 = randint(-3350,-2350)
+    if pos_y3 >= 600:
+        pos_y3 = randint(-4500,-3500)
+        
+    janela.blit(fundo,(0,0))
+    janela.blit(dai,(x,y))
+    janela.blit(fogao,(pos_x,pos_y))
+    janela.blit(ctps,(pos_x+380,pos_y1)) #450 p X
+    janela.blit(racao,(pos_x+250,pos_y2))
+    janela.blit(vassoura,(pos_x+120,pos_y3))
+    janela.blit(texto,pos_texto)
+    texto = font.render('Responsabilidades: '+str(contador),True,(255,255,255),(0,0,0))
+    
+
+    pygame.display.update()
+
+pos_texto2 = texto.get_rect()
+pos_texto2.center = (205,150)
+pos_texto3 = texto.get_rect()
+pos_texto3.center = (375,300)
+
+janela.fill((0,0,0))
+texto2 = font.render('Responsabilidades não feitas com sucesso: '+str(contador),True,(255,255,255),(0,0,0))
+janela.blit(texto2,pos_texto2)
+texto3 = font.render('Game Over!!',True,(255,255,255),(0,0,0))
+janela.blit(texto3,pos_texto3)
+pygame.display.update()
+sleep(6)
+pygame.quit()
